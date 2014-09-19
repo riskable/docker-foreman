@@ -1,13 +1,15 @@
 docker-foreman
 ==============
 
-A Dockerfile and supporting scripts for running Red Hat Foreman inside a Docker
-container.  It is based on
+A `Dockerfile <https://docs.docker.com/reference/builder/>`_ and supporting
+scripts for running `Foreman <http://theforeman.org/>`_ inside a
+`Docker <https://www.docker.com/>`_ container.  It is based on
 `phusion/baseimage <https://registry.hub.docker.com/u/phusion/baseimage/>`_
 which is a modified version of Docker's default 'ubuntu' image.
 
-The image is configured to use the 'nightly' Debian repository because I could
-not get the 1.6 release working properly.
+The image is configured to use the
+`'nightly' Debian repository <http://theforeman.org/manuals/1.6/index.html#3.3.3DebianPackages>`_
+because I could not get the 1.6 release working properly.
 
 Note that I am not a Foreman expert (yet).  This Docker image was created so
 that can happen :smile: .  If I've made a horrible mistake somewere please
@@ -20,7 +22,7 @@ It is recommended that to build this Docker image like so::
     docker build -t foreman /path/to/docker-foreman/.
 
 This will create a new docker image named "foreman" using the Dockerfile in
-this repository.  Replace `/path/to/docker-foreman/.` with the correct path on
+this repository.  Replace ``/path/to/docker-foreman/.`` with the correct path on
 your system.
 
 Running
@@ -34,9 +36,10 @@ That will run the image in a new container with the hostname,
 ports 80 and 443 inside the container exposed as ports 8080 and 8443,
 respectively.
 
-The first time the container is run it will execute the `first_run.sh` script
-which calls `foreman-installer --reset-foreman-db` and
-`foreman-rake permissions:reset` to reset the Foreman database and provide new
+The first time the container is run it will execute the
+`first_run.sh <https://github.com/riskable/docker-foreman/blob/master/first_run.sh>`_
+script which calls `foreman-installer --reset-foreman-db` and
+``foreman-rake permissions:reset`` to reset the Foreman database and provide new
 credentials for the 'admin' user.  These credentials will be displayed so make
 sure to take a note of them so you can login after it's done starting up.
 
@@ -46,7 +49,7 @@ There's some (mostly minor) issues with the image...
 
 idle_timeout
 ^^^^^^^^^^^^
-For some reason Foreman sets the default `idle_timeout` set to 0 which forces
+For some reason Foreman sets the default ``idle_timeout`` set to 0 which forces
 you to (annoyingly) re-login every time you navigate to any page.  To fix it:
 
     1. Login.
@@ -60,12 +63,13 @@ Once that's done it *may* ask you to login one more time but the overall problem
 will be fixed.
 
 If anyone knows how to set that permission from the command line after Foreman
-is installed let me know so I can incorporate it into the `first_run.sh` script.
+is installed let me know so I can incorporate it into the ``first_run.sh``
+script.
 
 SmartProxy Errors
 ^^^^^^^^^^^^^^^^^
 I have not tested Foreman's SmartProxy in this image so I don't know if it
-works.  What I *do* know is that when you build the image `foreman-installer`
+works.  What I *do* know is that when you build the image ``foreman-installer``
 will output errors like this::
 
     E, [2014-09-19T01:27:00.689495 #381] ERROR -- : ge: 365/366, 99%, 0.0/s, elapsed: 00:05:39
@@ -74,8 +78,8 @@ will output errors like this::
 
 I don't know what the consequences of that are are but I do believe it has
 something to do with the fact that the hostname of the image isn't set to an
-FQDN when the image is built.  I'm *hoping* that by passing the `--hostname=`
-option to `docker run` corrects the problem.  Maybe someone that knows more
+FQDN when the image is built.  I'm *hoping* that by passing the ``--hostname=``
+option to ``docker run`` corrects the problem.  Maybe someone that knows more
 about Foreman can provide more detail (
 `open an issue <https://github.com/riskable/docker-foreman/issues/new>`_).
 
@@ -124,7 +128,7 @@ can install any of the plugins in the official 'plugins' repository::
     ruby-puppetdb-foreman - Foreman Puppetdb Plugin
     ruby-smart-proxy-salt - SaltStack Plug-In for Foreman's Smart Proxy
 
-**Example:** `apt-get install ruby-foreman-column-view`
+**Example:** ``apt-get install ruby-foreman-column-view``
 
 Enjoy!
 
