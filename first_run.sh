@@ -18,6 +18,21 @@ if [ -f "/etc/foreman/.first_run_completed" ]; then
 fi
 echo "FIRST-RUN: Please wait while Foreman is configured..."
 
+# Copy the SSL key/cert for PostgreSQL so we don't get permissions errors
+mkdir -p /etc/ssl/postgresql/{private,certs}
+cp /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/ssl/postgresql/certs/
+cp /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/postgresql/private/
+chmod 640 /etc/ssl/postgresql/private/ssl-cert-snakeoil.key
+chmod 750 /etc/ssl/postgresql/private
+chown -R postgres /etc/ssl/postgresql
+
+# Change PostgreSQL's ssl settings to reflect the new locations:
+sed -i -e "/ssl_cert_file/s/certs/postgresql\/certs/g" \
+    -e "/ssl_key_file/s/private/postgresql\/private/g" \
+    /etc/postgresql/9.3/main/postgresql.conf
+
+/etc/init.d/postgresql restart
+
 /usr/sbin/foreman-installer --reset-foreman-db
 foreman-rake db:migrate
 foreman-rake db:seed
