@@ -53,25 +53,6 @@ Known Issues
 ------------
 There's some (mostly minor) issues with the image...
 
-idle_timeout
-^^^^^^^^^^^^
-For some reason Foreman sets the default ``idle_timeout`` to 0 which forces
-you to (annoyingly) re-login every time you navigate to any page.  To fix it:
-
-    1. Login.
-    2. Navigate to Administer->Settings.
-    3. It will ask you to login again (sigh).
-    4. Click on the "General" tab (this will not require logging in again).
-    5. Click the 'idle_timeout' setting to edit it.
-    6. Set it to something like '60' for a 1-hour timeout and click "Save".
-
-Once that's done it *may* ask you to login one more time but the overall problem
-will be fixed.
-
-If anyone knows how to set that permission from the command line after Foreman
-is installed let me know so I can incorporate it into the ``first_run.sh``
-script.
-
 SmartProxy Errors
 ^^^^^^^^^^^^^^^^^
 I have not tested Foreman's SmartProxy in this image so I don't know if it

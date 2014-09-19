@@ -38,6 +38,11 @@ foreman-rake db:migrate
 foreman-rake db:seed
 foreman-rake permissions:reset # This will display the admin password; NOTE IT
 
+# Fix the missing idle_timeout value so we don't get logged out after each page
+su - postgres <<'EOF'
+psql -d foreman -c "update settings set value = 60 where settings.name = 'idle_timeout';"
+EOF
+
 # Configure Foreman to start at boot
 sed -i -e "s/START=no/START=yes/g" /etc/default/foreman
 
