@@ -38,10 +38,16 @@ respectively.
 
 The first time the container is run it will execute the
 `first_run.sh <https://github.com/riskable/docker-foreman/blob/master/first_run.sh>`_
-script which calls `foreman-installer --reset-foreman-db` and
+script which calls ``foreman-installer --reset-foreman-db`` and
 ``foreman-rake permissions:reset`` to reset the Foreman database and provide new
 credentials for the 'admin' user.  These credentials will be displayed so make
 sure to take a note of them so you can login after it's done starting up.
+
+**NOTE:** The ``first_run.sh`` script only runs
+``foreman-installer --reset-foreman-db`` *once*.  If you ``docker commit`` the
+container (say, after an ``apt-get update && apt-get upgrade``) it will not
+reset the database unless you remove the ``/etc/foreman/.first_run_completed``
+file.
 
 Known Issues
 ------------
@@ -49,7 +55,7 @@ There's some (mostly minor) issues with the image...
 
 idle_timeout
 ^^^^^^^^^^^^
-For some reason Foreman sets the default ``idle_timeout`` set to 0 which forces
+For some reason Foreman sets the default ``idle_timeout`` to 0 which forces
 you to (annoyingly) re-login every time you navigate to any page.  To fix it:
 
     1. Login.
@@ -88,9 +94,9 @@ Tips
 
 Install Plugins and Extra Tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Use the docker-enter command (if you don't have it follow the instructions
+Use the ``docker-enter`` command (if you don't have it follow the instructions
 `here <https://github.com/jpetazzo/nsenter>`_) to enter the container then you
-can install any of the plugins in the official 'plugins' repository::
+can install any of the packages/plugins in the official 'plugins' repository::
 
     root@foreman:~# apt-cache search foreman
     foremancli - commandline search interface to Foreman
