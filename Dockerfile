@@ -25,7 +25,7 @@ RUN echo "deb http://deb.theforeman.org/ plugins nightly" >> /etc/apt/sources.li
 RUN curl http://deb.theforeman.org/pubkey.gpg | apt-key add -
 RUN apt-get update --fix-missing && apt-get -y upgrade && \
     apt-get -y install git puppet apache2 build-essential ruby ruby-dev rake \
-    facter bundler postgresql-9.3 postgresql-client-9.3 \
+    facter bundler postgresql-9.3 postgresql-client-9.3 python \
     postgresql-server-dev-9.3 libxml2-dev libxslt1-dev libvirt-dev \
     foreman-installer foreman-cli foreman-postgresql
 RUN apt-get -y clean
