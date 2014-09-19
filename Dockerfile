@@ -16,21 +16,19 @@
 FROM phusion/baseimage
 MAINTAINER Dan McDougall <daniel.mcdougall@liftoffsoftware.com>
 
-# Ensure everything is installed and up-to-date
+# Ensures apt doesn't ask us silly questions:
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update --fix-missing
-RUN apt-get -y upgrade && apt-get install -y wget git puppet \
-    build-essential ruby ruby-dev rake libsqlite3-dev libvirt-dev \
-    libmysqlclient-dev postgresql-server-dev-9.3 openssl libxml2-dev \
-    libsqlite3-dev libxslt1-dev zlib1g-dev libreadline-dev
 
 # Add the Foreman repos
 RUN echo "deb http://deb.theforeman.org/ trusty nightly" > /etc/apt/sources.list.d/foreman.list
 RUN echo "deb http://deb.theforeman.org/ plugins nightly" >> /etc/apt/sources.list.d/foreman.list
-RUN wget -q http://deb.theforeman.org/pubkey.gpg -O- | apt-key add -
-RUN apt-get update && apt-get -y install foreman-installer
+RUN curl http://deb.theforeman.org/pubkey.gpg | apt-key add -
+RUN apt-get update --fix-missing && apt-get -y upgrade && \
+    apt-get -y install git puppet apache2 build-essential ruby ruby-dev rake \
+    facter bundler postgresql-9.3 postgresql-client-9.3 \
+    postgresql-server-dev-9.3 libxml2-dev libxslt1-dev libvirt-dev \
+    foreman-installer foreman-cli foreman-postgresql
 RUN apt-get -y clean
-RUN gem install sqlite3
 
 # Copy our first_run.sh script into the container:
 COPY first_run.sh /usr/local/bin/first_run.sh
